@@ -1,0 +1,175 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Surfaces — near-black, faintly blue, like document ink */
+  --color-ink: #0b0d10;
+  --color-ink-raised: #11151b;
+  --color-tint: #1b2430;
+  --color-rule: #232a33;
+  --color-rule-soft: #191e25;
+
+  /* Text */
+  --color-paper: #edeae3;
+  --color-paper-dim: #9aa0a8;
+  --color-paper-faint: #6b7178;
+
+  /* The one accent: iron-oxide stamp ink */
+  --color-stamp: #ce4b39;
+  --color-stamp-lift: #e8705c;
+
+  --font-display: 'Bodoni Moda', 'Times New Roman', serif;
+  --font-body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-body);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Bodoni's hairlines need the extra weight to survive on a dark ground */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+
+  ::selection {
+    background-color: var(--color-stamp);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-stamp-lift);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+}
+
+@layer components {
+  /* Small-caps mono label used for eyebrows, dates, tags */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Entry animation for the register rows */
+  .rise {
+    animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* --- Markdown body ------------------------------------------------------ */
+
+.md {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: color-mix(in srgb, var(--color-paper) 92%, transparent);
+}
+
+/* Fenced blocks carry their own styling from the <pre> wrapper, so the
+   inline-code treatment has to stand down inside one. */
+.md pre code.md-inline-code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Lists are styled here rather than in the component map so an <li> can be
+   marked by its parent without needing to know what that parent is. */
+.md ul,
+.md ol {
+  margin-block: 1.5rem;
+}
+
+.md li + li {
+  margin-top: 0.625rem;
+}
+
+.md ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.md ul > li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+/* An en-dash rule in the accent, in place of a bullet */
+.md ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.85em;
+  width: 0.75rem;
+  height: 1px;
+  background-color: var(--color-stamp);
+}
+
+.md ol {
+  list-style: decimal;
+  padding-left: 1.75rem;
+}
+
+.md ol > li::marker {
+  font-family: var(--font-mono);
+  font-size: 0.8125em;
+  color: var(--color-stamp);
+}
+
+/* Nested lists tighten up */
+.md li > ul,
+.md li > ol {
+  margin-block: 0.625rem;
+}
+
+.md a {
+  color: var(--color-paper);
+  text-decoration: underline;
+  text-decoration-color: var(--color-stamp);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 0.15s ease;
+}
+
+.md a:hover {
+  color: var(--color-stamp-lift);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
