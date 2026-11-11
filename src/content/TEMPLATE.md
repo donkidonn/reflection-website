@@ -15,6 +15,7 @@ derived automatically. Nothing else in the project needs to change.
 title: "Reflection 2: Your Title Here"
 slug: "your-slug-here"
 date: "2026-08-15"
+term: "Final"
 course: "Information Assurance and Security"
 tags: ["First Tag", "Second Tag"]
 summary: "One or two sentences shown on the home page card."
@@ -49,6 +50,8 @@ A horizontal rule renders as a centred break mark.
 | `title`   | yes      | Shown on the card and as the page heading                |
 | `slug`    | yes      | The URL: `/reflections/<slug>`. Keep it unique.          |
 | `date`    | yes      | `YYYY-MM-DD`. Sorting is newest first.                   |
+| `term`    | no       | e.g. "Midterm" or "Final". Groups the index; numbering   |
+|           |          | restarts per term (name files like `final-01-slug.md`)  |
 | `course`  | no       | Shown in the eyebrow above the title                     |
 | `tags`    | no       | `["a", "b"]` — a plain inline array                      |
 | `summary` | no       | The teaser on the index                                  |

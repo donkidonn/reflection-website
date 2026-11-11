@@ -96,19 +96,20 @@ export function readingTime(body) {
 }
 
 /**
- * Entry number from the filename prefix — 03-whatever.md is entry 3.
+ * Entry number from the filename prefix — 03-whatever.md is entry 3, and
+ * final-02-whatever.md is entry 2 of its term. Numbering restarts per term.
  * Falls back to chronological position when a file isn't numbered.
  */
+const PREFIX = /^(?:[a-z]+[-_])?(\d+)[-_]?/i
+
 function numberFromPath(path) {
   const name = path.split('/').pop() ?? ''
-  const match = name.match(/^(\d+)/)
+  const match = name.match(PREFIX)
   return match ? Number(match[1]) : null
 }
 
 function slugFromPath(path) {
-  return (path.split('/').pop() ?? '')
-    .replace(/\.md$/, '')
-    .replace(/^\d+[-_]?/, '')
+  return (path.split('/').pop() ?? '').replace(/\.md$/, '').replace(PREFIX, '')
 }
 
 /**
@@ -117,6 +118,23 @@ function slugFromPath(path) {
 function chronological(a, b) {
   if (a.date !== b.date) return a.date < b.date ? -1 : 1
   return (a.number ?? 0) - (b.number ?? 0)
+}
+
+/**
+ * Reflections grouped by term, newest term first. Entries without a term
+ * share one unnamed group.
+ */
+export function groupByTerm(entries) {
+  const groups = []
+  for (const entry of entries) {
+    let group = groups.find((g) => g.term === entry.term)
+    if (!group) {
+      group = { term: entry.term, entries: [] }
+      groups.push(group)
+    }
+    group.entries.push(entry)
+  }
+  return groups
 }
 
 function load() {
@@ -129,6 +147,7 @@ function load() {
       slug: data.slug || slugFromPath(path),
       title: data.title || slugFromPath(path),
       date: data.date || '',
+      term: data.term || '',
       course: data.course || '',
       tags: Array.isArray(data.tags) ? data.tags : data.tags ? [data.tags] : [],
       summary: data.summary || '',
@@ -138,10 +157,12 @@ function load() {
     }
   })
 
-  // Oldest first, so unnumbered files can inherit their position…
+  // Oldest first, so unnumbered files can inherit their position in their term…
   entries.sort(chronological)
-  entries.forEach((entry, index) => {
-    if (entry.number === null) entry.number = index + 1
+  const counts = {}
+  entries.forEach((entry) => {
+    counts[entry.term] = (counts[entry.term] ?? 0) + 1
+    if (entry.number === null) entry.number = counts[entry.term]
   })
 
   // …then newest first for display.

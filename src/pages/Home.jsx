@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import SecurityTint from '../components/SecurityTint.jsx'
 import usePageTitle from '../components/usePageTitle.js'
-import { formatDate, reflections } from '../lib/reflections.js'
+import { formatDate, groupByTerm, reflections } from '../lib/reflections.js'
 
 const COURSE = reflections[0]?.course ?? 'Information Assurance and Security'
 
@@ -107,11 +107,27 @@ export default function Home() {
             and it will appear here.
           </p>
         ) : (
-          <ul>
-            {reflections.map((reflection, index) => (
-              <Entry key={reflection.slug} reflection={reflection} index={index} />
-            ))}
-          </ul>
+          groupByTerm(reflections).map(({ term, entries }) => (
+            <section key={term || 'untermed'}>
+              {term && (
+                <h3 className="label mt-10 flex items-baseline gap-x-2 border-b border-rule-soft pb-3 text-stamp first:mt-6">
+                  {term} term
+                  <span className="text-paper-faint">
+                    {String(entries.length).padStart(2, '0')}
+                  </span>
+                </h3>
+              )}
+              <ul>
+                {entries.map((reflection) => (
+                  <Entry
+                    key={reflection.slug}
+                    reflection={reflection}
+                    index={reflections.indexOf(reflection)}
+                  />
+                ))}
+              </ul>
+            </section>
+          ))
         )}
       </main>
 

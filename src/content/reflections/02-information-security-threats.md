@@ -2,6 +2,7 @@
 title: "Reflection 2: The Categories of Threats to Information Security"
 slug: "information-security-threats"
 date: "2026-08-08"
+term: "Midterm"
 course: "CIT.017 - A"
 tags: ["Threats", "Social Engineering", "Human Factor"]
 summary: "Why most threats to a system are not attackers at all, and why the person holding the credentials is the part I keep forgetting to secure."

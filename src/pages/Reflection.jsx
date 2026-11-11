@@ -19,7 +19,10 @@ function NeighbourLink({ reflection, direction, divided }) {
       <span className="label text-paper-faint transition-colors duration-200 group-hover:text-stamp">
         {isPrevious ? '← Previous' : 'Next →'}
         <span className="ml-2 text-rule">/</span>
-        <span className="ml-2">{String(reflection.number).padStart(2, '0')}</span>
+        <span className="ml-2">
+          {reflection.term && `${reflection.term} `}
+          {String(reflection.number).padStart(2, '0')}
+        </span>
       </span>
 
       <span
@@ -42,7 +45,7 @@ export default function Reflection() {
 
   if (!reflection) return <NotFound />
 
-  const { number, title, date, course, tags, body, readingTime } = reflection
+  const { number, term, title, date, course, tags, body, readingTime } = reflection
   const { previous, next } = getNeighbours(slug)
   const hasNeighbours = Boolean(previous || next)
 
@@ -58,7 +61,7 @@ export default function Reflection() {
       <article className="mt-14 sm:mt-20">
         <header>
           <p className="label text-stamp">
-            Reflection {String(number).padStart(2, '0')}
+            {term && `${term} · `}Reflection {String(number).padStart(2, '0')}
             {course && (
               <>
                 <span className="mx-2 text-rule">/</span>

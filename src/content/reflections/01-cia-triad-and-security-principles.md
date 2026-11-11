@@ -2,6 +2,7 @@
 title: "Reflection 1: The CIA Triad and Security Principles"
 slug: "cia-triad-and-security-principles"
 date: "2026-08-01"
+term: "Midterm"
 course: "CIT.017 - A"
 tags: ["CIA Triad", "Security Principles", "Fundamentals"]
 summary: "What I learned about the three properties every secure system needs, and why security is a design constraint rather than a final checklist."
